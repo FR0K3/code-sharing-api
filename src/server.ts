@@ -16,6 +16,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // Routes
+router.get("/health", (req, res) => res.status(200).json({ message: "Healthy:)" }))
 app.use('/api/snippets', snippetsRoutes);
 
 export default app;
