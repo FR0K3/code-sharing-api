@@ -1,14 +1,15 @@
 import { CorsOptions } from "cors";
 
-export const corsConfig: CorsOptions = {
-  origin: function (origin, callback) {
-    const whiteList = [process.env.FRONTEND_URL];
+const whiteList = [process.env.FRONTEND_URL]
+  .filter((url): url is string => Boolean(url))
+  .map((url) => url.replace(/\/$/, ""));
 
+export const corsConfig: CorsOptions = {
+  origin(origin, callback) {
     if (!origin) return callback(null, true);
 
-    if (whiteList.includes(origin))
-      callback(null, true);
-    else
-      callback(new Error('Not allowed by CORS'));
-  }
-}
+    if (whiteList.includes(origin)) return callback(null, true);
+
+    callback(new Error("Not allowed by CORS"));
+  },
+};
