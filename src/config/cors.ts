@@ -2,7 +2,9 @@ import { CorsOptions } from "cors";
 
 const whiteList = [process.env.FRONTEND_URL]
   .filter((url): url is string => Boolean(url))
-  .map((url) => url.replace(/\/$/, ""));
+  .map((url) => url.trim().replace(/\/$/, ""));
+
+console.log("CORS whiteList:", whiteList);
 
 export const corsConfig: CorsOptions = {
   origin(origin, callback) {
@@ -10,6 +12,7 @@ export const corsConfig: CorsOptions = {
 
     if (whiteList.includes(origin)) return callback(null, true);
 
-    callback(new Error("Not allowed by CORS"));
+    console.warn("Origin rejected:", origin);
+    callback(null, false);
   },
 };
